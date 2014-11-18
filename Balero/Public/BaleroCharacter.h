@@ -3,18 +3,24 @@
 #include "GameFramework/Character.h"
 #include "BaleroCharacter.generated.h"
 
+class UUnitGroup;
+
 UCLASS(Blueprintable)
 class ABaleroCharacter : public ACharacter
 {
 	GENERATED_UCLASS_BODY()
 
-	/** Top down camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
-	TSubobjectPtr<class UCameraComponent> TopDownCameraComponent;
+	/** Selection effect*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Effects)
+	TSubobjectPtr<class UStaticMeshComponent> SelectedEffect;
 
-	/** Camera boom positioning the camera above the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
-	TSubobjectPtr<class USpringArmComponent> CameraBoom;
+
+	virtual void UpdateNavigationRelevance() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UnitGroup)
+	UUnitGroup* UnitGroup;
+
+	UFUNCTION(BlueprintCallable, Category = Unit)
+	FVector2D GetActorLocation2D();
 
 };
-

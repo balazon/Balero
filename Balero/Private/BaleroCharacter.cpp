@@ -20,17 +20,33 @@ ABaleroCharacter::ABaleroCharacter(const class FPostConstructInitializePropertie
 	CharacterMovement->bConstrainToPlane = true;
 	CharacterMovement->bSnapToPlaneAtStart = true;
 
-	// Create a camera boom...
-	CameraBoom = PCIP.CreateDefaultSubobject<USpringArmComponent>(this, TEXT("CameraBoom"));
-	CameraBoom->AttachTo(RootComponent);
-	CameraBoom->bAbsoluteRotation = true; // Don't want arm to rotate when character does
-	CameraBoom->TargetArmLength = 800.f;
-	CameraBoom->RelativeRotation = FRotator(-60.f, 0.f, 0.f);
-	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 
-	// Create a camera...
-	TopDownCameraComponent = PCIP.CreateDefaultSubobject<UCameraComponent>(this, TEXT("TopDownCamera"));
-	TopDownCameraComponent->AttachTo(CameraBoom, USpringArmComponent::SocketName);
-	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	//Creating selection effect mesh
+	SelectedEffect = PCIP.CreateDefaultSubobject<UStaticMeshComponent>(this, TEXT("SelectedEffect"));
+	SelectedEffect->AttachTo(RootComponent);
+	SelectedEffect->SetVisibility(false);
+
+	UnitGroup = NULL;
+
+}
+
+
+
+void ABaleroCharacter::UpdateNavigationRelevance()
+{
+	bCanAffectNavigationGeneration = true;
+	//CapsuleComponent->bNavigationRelevant = true;
+	Super::UpdateNavigationRelevance();
+
+	//SetCanAffectNavigationGeneration(true);
+
+	//CapsuleComponent->SetCanEverAffectNavigation(true);
+}
+
+
+FVector2D ABaleroCharacter::GetActorLocation2D()
+{
+	FVector Loc = GetActorLocation();
+	return FVector2D(Loc.X, Loc.Y);
 }
